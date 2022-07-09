@@ -91,7 +91,7 @@ contract StakingPoolForUniswapV2Tokens is Ownable, Pausable, ReentrancyGuard {
 
         uint256 pendingRewards;
 
-        if (userInfo[msg.sender].amount > 0) {
+        if (userInfo[msg.sender].amount >= 0) {
             pendingRewards =
                 ((userInfo[msg.sender].amount * accTokenPerShare) / PRECISION_FACTOR) -
                 userInfo[msg.sender].rewardDebt;
@@ -133,7 +133,7 @@ contract StakingPoolForUniswapV2Tokens is Ownable, Pausable, ReentrancyGuard {
     function emergencyWithdraw() external nonReentrant whenPaused {
         uint256 userBalance = userInfo[msg.sender].amount;
 
-        require(userBalance != 0, "Withdraw: Amount must be > 0");
+        require(userBalance != 0, "Amount must be > 0, plz check your balance");
 
         // Reset internal value for user
         userInfo[msg.sender].amount = 0;
@@ -151,10 +151,10 @@ contract StakingPoolForUniswapV2Tokens is Ownable, Pausable, ReentrancyGuard {
     function withdraw(uint256 amount) external nonReentrant {
         require(
             (userInfo[msg.sender].amount >= amount) && (amount > 0),
-            "Withdraw: Amount must be > 0 or lower than user balance"
+            "Withdraw: Amount must be > 0"
         );
 
-        _updatePool();
+        poolUpdate();
 
         uint256 pendingRewards = ((userInfo[msg.sender].amount * accTokenPerShare) / PRECISION_FACTOR) -
             userInfo[msg.sender].rewardDebt;
@@ -279,3 +279,27 @@ contract StakingPoolForUniswapV2Tokens is Ownable, Pausable, ReentrancyGuard {
         }
     }
 }
+
+//  _______________#########_______________________
+//  ______________###NFTSea######_____________________
+//  ______________####NFTSea######____________________
+//  _____________##__##NFTSea######___________________
+//  ____________###__######_#####__________________
+//  ____________###_#######___####_________________
+//  ___________###__###NFTSea##_####________________
+//  __________####__#####NFTSea##_####_______________
+//  ________#####___####NFTSea#__#####_____________
+//  _______######___###NFTSea###___#####___________
+//  _______#####___###___#NFTSea#___######_________
+//  ______######___###__###NFTSea##___######_______
+//  _____######___####_#####NFTSea###__######______
+//  ____#######__############NFTSea##_#######_____
+//  ____#######__#############NFTSea###########____
+//  ___#######__######_########NFTSea###_#######___
+//  ___#######__######_######_##NFTSea#___######___
+//  ___#######____##__######___######_____######___
+//  ___#######________######____#####_____#####____
+//  ____######________#####_____#####_____####_____
+//  _____#####________####______#####_____###______
+//  ______#####______;###________###______#________
+//  ________##_______####________####______________

@@ -10,8 +10,8 @@ import {ISwapRouter} from "./uniswap-interfaces/ISwapRouter.sol";
 import {FeeSharingSystem} from "./FeeSharingSystem.sol";
 
 /**
- * @title AggregatorFeeSharingWithUniswapV3
- * @notice It sells WETH to NFTs using Uniswap V3.
+ * @title AggregatorFeeSharingV3
+ * @notice It sells WETH to NFTs .
  * @dev Prime shares represent the number of shares in the FeeSharingSystem. When not specified, shares represent secondary shares in this contract.
  */
 contract AggregatorFeeSharingWithUniswapV3 is Ownable, Pausable, ReentrancyGuard {
@@ -23,7 +23,7 @@ contract AggregatorFeeSharingWithUniswapV3 is Ownable, Pausable, ReentrancyGuard
     // FeeSharingSystem (handles the distribution of WETH for NFTs stakers)
     FeeSharingSystem public immutable feeSharingSystem;
 
-    // Router of Uniswap v3
+    // Router, take the example of Uniswap v3
     ISwapRouter public immutable uniswapRouter;
 
     // Minimum deposit in NFTs (it is derived from the FeeSharingSystem)
@@ -194,7 +194,7 @@ contract AggregatorFeeSharingWithUniswapV3 is Ownable, Pausable, ReentrancyGuard
     function startHarvest() external onlyOwner {
         canHarvest = true;
 
-        emit HarvestStart();
+        emit HarvestStart(); //Start
     }
 
     /**
@@ -204,7 +204,7 @@ contract AggregatorFeeSharingWithUniswapV3 is Ownable, Pausable, ReentrancyGuard
     function stopHarvest() external onlyOwner {
         canHarvest = false;
 
-        emit HarvestStop();
+        emit HarvestStop(); //Stop
     }
 
     /**
@@ -250,6 +250,7 @@ contract AggregatorFeeSharingWithUniswapV3 is Ownable, Pausable, ReentrancyGuard
      * @dev Only callable by owner
      */
     function pause() external onlyOwner whenNotPaused {
+        emit HarvestStop();
         _pause();
     }
 
@@ -258,6 +259,7 @@ contract AggregatorFeeSharingWithUniswapV3 is Ownable, Pausable, ReentrancyGuard
      * @dev Only callable by owner
      */
     function unpause() external onlyOwner whenPaused {
+        emit HarvestStart();
         _unpause();
     }
 
@@ -385,3 +387,27 @@ contract AggregatorFeeSharingWithUniswapV3 is Ownable, Pausable, ReentrancyGuard
         emit Withdraw(msg.sender, amountToTransfer);
     }
 }
+
+//  _______________#########_______________________
+//  ______________###NFTSea######_____________________
+//  ______________####NFTSea######____________________
+//  _____________##__##NFTSea######___________________
+//  ____________###__######_#####__________________
+//  ____________###_#######___####_________________
+//  ___________###__###NFTSea##_####________________
+//  __________####__#####NFTSea##_####_______________
+//  ________#####___####NFTSea#__#####_____________
+//  _______######___###NFTSea###___#####___________
+//  _______#####___###___#NFTSea#___######_________
+//  ______######___###__###NFTSea##___######_______
+//  _____######___####_#####NFTSea###__######______
+//  ____#######__############NFTSea##_#######_____
+//  ____#######__#############NFTSea###########____
+//  ___#######__######_########NFTSea###_#######___
+//  ___#######__######_######_##NFTSea#___######___
+//  ___#######____##__######___######_____######___
+//  ___#######________######____#####_____#####____
+//  ____######________#####_____#####_____####_____
+//  _____#####________####______#####_____###______
+//  ______#####______;###________###______#________
+//  ________##_______####________####______________

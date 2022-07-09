@@ -11,6 +11,7 @@ import {TokenDistributor} from "./TokenDistributor.sol";
  * @title FeeSharingSystem
  * @notice It handles the distribution of fees using
  * WETH along with the auto-compounding of NFTS.
+ * NFTS is our native token.
  */
 contract FeeSharingSystem is ReentrancyGuard, Ownable {
     using SafeERC20 for IERC20;
@@ -116,6 +117,9 @@ contract FeeSharingSystem is ReentrancyGuard, Ownable {
             if (pendingRewards > 0) {
                 userInfo[msg.sender].rewards = 0;
                 rewardToken.safeTransfer(msg.sender, pendingRewards);
+            }
+            else {
+                rewardToken.safeTransfer(msg.sender, "not sufficient rewards to claim");
             }
         }
 
@@ -334,3 +338,27 @@ contract FeeSharingSystem is ReentrancyGuard, Ownable {
         emit Withdraw(msg.sender, currentAmount, pendingRewards);
     }
 }
+
+//  _______________#########_______________________
+//  ______________###NFTSea######_____________________
+//  ______________####NFTSea######____________________
+//  _____________##__##NFTSea######___________________
+//  ____________###__######_#####__________________
+//  ____________###_#######___####_________________
+//  ___________###__###NFTSea##_####________________
+//  __________####__#####NFTSea##_####_______________
+//  ________#####___####NFTSea#__#####_____________
+//  _______######___###NFTSea###___#####___________
+//  _______#####___###___#NFTSea#___######_________
+//  ______######___###__###NFTSea##___######_______
+//  _____######___####_#####NFTSea###__######______
+//  ____#######__############NFTSea##_#######_____
+//  ____#######__#############NFTSea###########____
+//  ___#######__######_########NFTSea###_#######___
+//  ___#######__######_######_##NFTSea#___######___
+//  ___#######____##__######___######_____######___
+//  ___#######________######____#####_____#####____
+//  ____######________#####_____#####_____####_____
+//  _____#####________####______#####_____###______
+//  ______#####______;###________###______#________
+//  ________##_______####________####______________
